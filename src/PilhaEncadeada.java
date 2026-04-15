@@ -1,4 +1,7 @@
-public class PilhaEncadeada<T> {
+import java.util.Iterator;
+
+public class PilhaEncadeada<T> implements Iterable<T> {
+
     private No<T> topo;
     private int size;
 
@@ -7,7 +10,7 @@ public class PilhaEncadeada<T> {
         this.size = 0;
     }
 
-    public boolean isEspty() {
+    public boolean isEmpty() {
         return this.topo == null;
     }
 
@@ -33,12 +36,36 @@ public class PilhaEncadeada<T> {
     public String toString() {
         StringBuilder pilha = new StringBuilder("*** Topo ***\n");
         No<T> noAtual = this.topo;
-        while (noAtual != null) ;
-        pilha.append(noAtual.getDado()+"\n");
-        noAtual =  noAtual.getProximo();
 
+        while (noAtual != null) {
+            pilha.append(noAtual.getDado() + "\n");
+            noAtual = noAtual.getProximo();
+        }
 
         pilha.append("__________\n");
         return pilha.toString();
+    }
+
+    // ✅ AGORA DENTRO DA CLASSE
+
+    @Override
+    public Iterator<T> iterator() {
+        return new PilhaIterator();
+    }
+
+    private class PilhaIterator implements Iterator<T> {
+        private No<T> atual = topo;
+
+        @Override
+        public boolean hasNext() {
+            return atual != null;
+        }
+
+        @Override
+        public T next() {
+            T elemento = atual.getDado();
+            atual = atual.getProximo();
+            return elemento;
+        }
     }
 }
